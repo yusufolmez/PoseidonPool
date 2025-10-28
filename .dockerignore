@@ -1,0 +1,39 @@
+# ----------------------------------------------------------------------
+# 1. Klasörler
+# Geçici derleme ve çalýþma zamaný klasörlerini yoksay
+# ----------------------------------------------------------------------
+**/bin/
+**/obj/
+**/out/
+**/publish/
+
+# ----------------------------------------------------------------------
+# 2. Dotnet Geçici Dosyalarý ve Ayarlar
+# ----------------------------------------------------------------------
+**/.vs/             # Visual Studio geçici ayarlarý
+**/.vscode/         # VS Code ayarlarý
+**/.git/            # Git versiyon kontrol sistemi dosyalarý
+**/.idea/           # JetBrains Rider geçici ayarlarý
+**/.cache/          # Nuget ve diðer önbellek klasörleri
+
+# ----------------------------------------------------------------------
+# 3. Baðýmlýlýklar (NuGet)
+# Kopyalama sýrasýnda Nuget paketlerini hariç tut. Dockerfile'da restore edilir.
+# ----------------------------------------------------------------------
+**/packages/
+**/node_modules/    # Eðer projede frontend baðýmlýlýðý varsa
+
+# ----------------------------------------------------------------------
+# 4. Yapýlandýrma ve Veritabaný Dosyalarý (Güvenlik)
+# Geliþtirme ortamýna özgü veya hassas dosyalarý hariç tut.
+# ----------------------------------------------------------------------
+appsettings.*.Development.json # Geliþtirme ortamý ayarlarý
+appsettings.Local.json         # Lokal ayarlar
+*.user                         # Visual Studio kullanýcý dosyalarý
+*.sqlite                       # Lokal SQLite veritabaný dosyalarý
+
+# ----------------------------------------------------------------------
+# 5. Log ve Test Sonuçlarý
+# ----------------------------------------------------------------------
+**/TestResults/
+**/logs/

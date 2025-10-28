@@ -13,7 +13,6 @@ namespace PoseidonPool.Domain.Entities.Order
     }
     public class Ordering : BaseEntity
     {
-        public string OrderId { get; set; }
         public DateTime OrderDate { get; set; }
         public OrderStatus Status { get; set; }
         public Address ShippingAddress { get; set; }

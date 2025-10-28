@@ -1,0 +1,40 @@
+version: '3.8'
+
+services:
+  # 1. POSTGRESQL Veritaban� Servisi
+  postgresql:
+    image: postgres:16-alpine
+    container_name: poseidonpool_db
+    restart: always
+    environment:
+      POSTGRES_USER: poseidon_dev_user       
+      POSTGRES_PASSWORD: cok_gizli_dev_sifre 
+      POSTGRES_DB: PoseidonPoolDB_Dev 
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data  
+
+  # 2. REDIS �nbellek Servisi
+  redis:
+    image: redis:7.2-alpine
+    container_name: poseidonpool_redis
+    restart: always
+    ports:
+      - "6379:6379"
+
+  # 3. POSEIDON POOL UYGULAMA SERV�S� (Presentation Katman�)
+  api:
+    build:
+      context: .         
+      dockerfile: Dockerfile
+    container_name: poseidonpool_api
+    restart: always
+    ports:
+      - "80:8080"          
+    depends_on:
+      - postgresql       
+      - redis
+      
+volumes:
+  postgres_data:

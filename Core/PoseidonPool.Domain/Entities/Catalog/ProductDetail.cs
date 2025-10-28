@@ -5,14 +5,9 @@ namespace PoseidonPool.Domain.Entities.Catalog
 {
     public class ProductDetail : BaseEntity
     {
-        [BsonId]
-        [BsonRepresentation(BsonType.ObjectId)]
-        public string ProductDetailId { get; set; }
         public string ProductDescription { get; set; }
         public string ProductInfo { get; set; }
-        public string ProductId { get; set; }
-
-        [BsonIgnore]
+        public Guid ProductId { get; set; }
         public Product Product { get; set; }
     }
 }

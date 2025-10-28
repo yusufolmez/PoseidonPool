@@ -5,9 +5,6 @@ namespace PoseidonPool.Domain.Entities.Catalog
 {
     public class Contact : BaseEntity
     {
-        [BsonId]
-        [BsonRepresentation(BsonType.ObjectId)]
-        public string ContactId { get; set; }
         public string NameSurname { get; set; }
         public string Email { get; set; }
         public string Subject { get; set; }

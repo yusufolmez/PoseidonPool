@@ -1,22 +1,22 @@
 ﻿using MongoDB.Bson;
 using MongoDB.Bson.Serialization.Attributes;
+using PoseidonPool.Domain.Entities.Comment;
 
 namespace PoseidonPool.Domain.Entities.Catalog
 {
     public class Product : BaseEntity
     {
-        [BsonId]
-        [BsonRepresentation(BsonType.ObjectId)]
-        public string ProductId { get; set; }
         public string ProductName { get; set; }
         public decimal ProductPrice { get; set; }
-        public string ProductImageUrl { get; set; }
-        public string ProductDescription { get; set; }
-
-        [BsonRepresentation(BsonType.ObjectId)]
-        public string CategoryId { get; set; }
-
-        [BsonIgnore]
+        public Guid ProductImageUrl { get; set; }
+        public Guid ProductDetailId { get; set; }
+        public Guid ProductImageId { get; set; }
+        public Guid CategoryId { get; set; }
+        public Guid BrandId { get; set; }
+        public ICollection<UserComment> Comments { get; set; }
+        public ICollection<ProductImage> Images { get; set; }
+        public Brand Brand { get; set; }
+        public ProductDetail ProductDetail { get; set; }
         public Category Category { get; set; }
     }
 }

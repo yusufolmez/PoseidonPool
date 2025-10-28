@@ -1,15 +1,17 @@
-﻿namespace PoseidonPool.Domain.Entities.Comment
+﻿using PoseidonPool.Domain.Entities.Catalog;
+using PoseidonPool.Domain.Entities.Identity;
+
+namespace PoseidonPool.Domain.Entities.Comment
 {
     public class UserComment : BaseEntity
     {
-        public int UserCommentId { get; set; }
-        public string NameSurname { get; set; }
+        public string CustomerId { get; set; }
+        public AppUser Customer { get; set; }
         public string? ImageUrl { get; set; }
-        public string Email { get; set; }
         public string CommentDetail { get; set; }
         public int Rating { get; set; }
-        public DateTime CreatedDate { get; set; }
         public bool Status { get; set; }
-        public string ProductId { get; set; }
+        public Guid ProductId { get; set; }
+        public Product Product { get; set; }
     }
 }

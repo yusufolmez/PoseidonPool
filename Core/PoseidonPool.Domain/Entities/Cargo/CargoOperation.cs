@@ -2,9 +2,10 @@
 {
     public class CargoOperation : BaseEntity
     {
-        public int CargoOperationId { get; set; }
+        public Guid CargoDetailId { get; set; }
         public string Barcode { get; set; }
         public string Description { get; set; }
         public DateTime OperationDate { get; set; }
+        public CargoDetail CargoDetail { get; set; }
     }
 }

@@ -1,17 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using PoseidonPool.Application.ViewModels.Basket;
+using PoseidonPool.Domain.Entities.Basket;
 
 namespace PoseidonPool.Application.Abstractions.Services
 {
     public interface IBasketService
     {
-        public Task GetBasketItemsAsync();
-        public Task AddItemToBasketAsync();
-        public Task UpdateQuantityAsync();
+        public Task<List<BasketItem>> GetBasketItemsAsync();
+        public Task AddItemToBasketAsync(VM_Create_BasketItem basketItem);
+        public Task UpdateQuantityAsync(VM_Update_BasketItem basketItem);
         public Task RemoveBasketItemAsync(string basketItemId);
-        public Task GetUserActiveBasketAsync { get; } 
+        public Basket? GetUserActiveBasketAsync { get; }
     }
 }

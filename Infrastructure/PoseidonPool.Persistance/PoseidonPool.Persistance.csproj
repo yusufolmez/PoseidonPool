@@ -7,6 +7,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="Google.Apis.Auth" Version="1.69.0" />
     <PackageReference Include="Microsoft.AspNetCore.Identity" Version="2.3.1" />
     <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="8.0.15" />
     <PackageReference Include="Microsoft.EntityFrameworkCore" Version="9.0.4" />
@@ -17,10 +18,20 @@
     <PackageReference Include="Microsoft.Extensions.Configuration" Version="9.0.4" />
     <PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="9.0.4" />
     <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="9.0.4" />
+    <PackageReference Include="Newtonsoft.Json" Version="13.0.4" />
+    <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="9.0.4" />
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\Core\PoseidonPool.Application\PoseidonPool.Application.csproj" />
     <ProjectReference Include="..\..\Core\PoseidonPool.Domain\PoseidonPool.Domain.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Repositories\Catalog\" />
+    <Folder Include="Repositories\Comment\" />
+    <Folder Include="Repositories\Discount\" />
+    <Folder Include="Repositories\Order\" />
   </ItemGroup>
 
 </Project>
