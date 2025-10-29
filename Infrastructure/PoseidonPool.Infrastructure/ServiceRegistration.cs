@@ -23,6 +23,7 @@ namespace PoseidonPool.Infrastructure
             services.AddScoped<IStorageService, StorageService>();
 
             // Register IAmazonS3 client. Credentials/region can come from appsettings or environment variables.
+            // Uses credential fallback (environment/instance profile) when explicit keys are not provided.
             services.AddSingleton<IAmazonS3>(sp =>
             {
                 var configuration = sp.GetService<IConfiguration>();
@@ -30,12 +31,30 @@ namespace PoseidonPool.Infrastructure
                 var secretKey = configuration?["AWS:SecretKey"] ?? Environment.GetEnvironmentVariable("AWS_SECRET_ACCESS_KEY");
                 var region = configuration?["AWS:Region"] ?? Environment.GetEnvironmentVariable("AWS_REGION") ?? "us-east-1";
 
-                if (string.IsNullOrWhiteSpace(accessKey) || string.IsNullOrWhiteSpace(secretKey))
-                    throw new InvalidOperationException("AWS credentials are not configured. Set AWS:AccessKey and AWS:SecretKey in configuration or environment variables.");
+                // Optional: allow forcing path style (useful when bucket names contain dots or in some endpoints)
+                var forcePathStyleStr = configuration?["Storage:Amazon:ForcePathStyle"] ?? Environment.GetEnvironmentVariable("S3_FORCE_PATH_STYLE");
+                var forcePathStyle = false;
+                if (!string.IsNullOrWhiteSpace(forcePathStyleStr) && bool.TryParse(forcePathStyleStr, out var fps))
+                    forcePathStyle = fps;
 
-                var creds = new BasicAWSCredentials(accessKey, secretKey);
-                var config = new AmazonS3Config { RegionEndpoint = RegionEndpoint.GetBySystemName(region) };
-                return new AmazonS3Client(creds, config);
+                AWSCredentials creds;
+                if (!string.IsNullOrWhiteSpace(accessKey) && !string.IsNullOrWhiteSpace(secretKey))
+                {
+                    creds = new BasicAWSCredentials(accessKey, secretKey);
+                }
+                else
+                {
+                    // fallback to the SDK credential chain (env, shared credentials file, EC2/ECS roles...)
+                    creds = FallbackCredentialsFactory.GetCredentials();
+                }
+
+                var s3Config = new AmazonS3Config
+                {
+                    RegionEndpoint = RegionEndpoint.GetBySystemName(region),
+                    ForcePathStyle = forcePathStyle
+                };
+
+                return new AmazonS3Client(creds, s3Config);
             });
         }
     }

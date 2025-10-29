@@ -51,14 +51,14 @@ namespace PoseidonPool.API.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Create([FromBody] CreateProductCommandRequest request)
+        public async Task<IActionResult> Create([FromForm] CreateProductCommandRequest request)
         {
             var response = await _mediator.Send(request);
             return Ok(response);
         }
 
         [HttpPut("{id}")]
-        public async Task<IActionResult> Update([FromRoute] string id, [FromBody] UpdateProductCommandRequest request)
+        public async Task<IActionResult> Update([FromRoute] string id, [FromForm] UpdateProductCommandRequest request)
         {
             request.Id = id;
             var response = await _mediator.Send(request);

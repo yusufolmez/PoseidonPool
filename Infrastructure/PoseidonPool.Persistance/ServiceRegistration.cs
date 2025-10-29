@@ -35,6 +35,8 @@ namespace PoseidonPool.Persistance
             // Catalog repositories
             services.AddScoped<PoseidonPool.Application.Repositories.Catalog.IProductReadRepository, PoseidonPool.Persistance.Repositories.Catalog.ProductReadRepository>();
             services.AddScoped<PoseidonPool.Application.Repositories.Catalog.IProductWriteRepository, PoseidonPool.Persistance.Repositories.Catalog.ProductWriteRepository>();
+            services.AddScoped<PoseidonPool.Application.Repositories.Catalog.IProductImageReadRepository, PoseidonPool.Persistance.Repositories.Catalog.ProductImageReadRepository>();
+            services.AddScoped<PoseidonPool.Application.Repositories.Catalog.IProductImageWriteRepository, PoseidonPool.Persistance.Repositories.Catalog.ProductImageWriteRepository>();
             services.AddScoped<PoseidonPool.Application.Repositories.Catalog.IProductDetailReadRepository, PoseidonPool.Persistance.Repositories.Catalog.ProductDetailReadRepository>();
             services.AddScoped<PoseidonPool.Application.Repositories.Catalog.IProductDetailWriteRepository, PoseidonPool.Persistance.Repositories.Catalog.ProductDetailWriteRepository>();
             services.AddScoped<PoseidonPool.Application.Repositories.Catalog.IBrandReadRepository, PoseidonPool.Persistance.Repositories.Catalog.BrandReadRepository>();

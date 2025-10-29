@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using PoseidonPool.Persistance.Contexts;
@@ -11,9 +12,11 @@ using PoseidonPool.Persistance.Contexts;
 namespace PoseidonPool.Persistance.Migrations
 {
     [DbContext(typeof(PoseidonPoolDBContext))]
-    partial class PoseidonPoolDBContextModelSnapshot : ModelSnapshot
+    [Migration("20251029200553_mig1.2")]
+    partial class mig12
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -624,31 +627,16 @@ namespace PoseidonPool.Persistance.Migrations
                     b.Property<string>("Image1")
                         .HasColumnType("text");
 
-                    b.Property<string>("Image1Key")
-                        .HasColumnType("text");
-
                     b.Property<string>("Image2")
-                        .HasColumnType("text");
-
-                    b.Property<string>("Image2Key")
                         .HasColumnType("text");
 
                     b.Property<string>("Image3")
                         .HasColumnType("text");
 
-                    b.Property<string>("Image3Key")
-                        .HasColumnType("text");
-
                     b.Property<string>("Image4")
                         .HasColumnType("text");
 
-                    b.Property<string>("Image4Key")
-                        .HasColumnType("text");
-
                     b.Property<string>("Image5")
-                        .HasColumnType("text");
-
-                    b.Property<string>("Image5Key")
                         .HasColumnType("text");
 
                     b.Property<Guid>("ProductId")

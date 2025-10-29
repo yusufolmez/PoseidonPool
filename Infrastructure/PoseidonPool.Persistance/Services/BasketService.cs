@@ -40,17 +40,14 @@ namespace PoseidonPool.Persistance.Services
             if (string.IsNullOrEmpty(username))
                 throw new Exception("Kullanıcı bulunamadı");
 
-            // get user first
             AppUser? user = await _userManager.Users.FirstOrDefaultAsync(u => u.UserName == username);
             if (user == null)
                 throw new Exception("Kullanıcı bulunamadı");
 
-            // Try to get existing basket directly from Baskets table by CustomerId.
             var existingBasket = await _basketReadRepository.Table.FirstOrDefaultAsync(b => b.CustomerId == user.Id);
             if (existingBasket != null)
                 return existingBasket;
 
-            // Not found -> create. Wrap potential unique-constraint race with try/catch and fallback read.
             var newBasket = new Basket
             {
                 Id = Guid.NewGuid(),
@@ -71,7 +68,6 @@ namespace PoseidonPool.Persistance.Services
                 }
                 catch (Microsoft.EntityFrameworkCore.DbUpdateException)
                 {
-                    // likely a unique constraint violation from concurrent insert; try to read the existing basket a few times
                     attempt++;
                     for (int i = 0; i < 5; i++)
                     {
@@ -82,9 +78,8 @@ namespace PoseidonPool.Persistance.Services
                     }
 
                     if (attempt >= maxRetries)
-                        throw; // give up after retries
+                        throw;
 
-                    // otherwise retry the insert (fresh newGuid)
                     newBasket.Id = Guid.NewGuid();
                 }
             }
@@ -94,7 +89,6 @@ namespace PoseidonPool.Persistance.Services
 
         public async Task AddItemToBasketAsync(VM_Create_BasketItem model)
         {
-            // obtain the user's basket (ContextBasket will create it if missing)
             Basket? basket = await ContextBasket();
 
             BasketItem? basketItem = await _basketItemReadRepository.GetSingleAsync(bi => bi.BasketId == basket.Id && bi.ProductId == Guid.Parse(model.ProductId));

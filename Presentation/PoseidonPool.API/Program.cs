@@ -2,6 +2,8 @@ using PoseidonPool.Application;
 using PoseidonPool.Infrastructure;
 using PoseidonPool.Persistance;
 using System;
+using System.Globalization;
+using Microsoft.AspNetCore.Localization;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
@@ -60,6 +62,16 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
+
+// Set default culture to en-US to ensure decimal parsing uses dot (19.99) by default.
+var supportedCultures = new[] { new CultureInfo("en-US") };
+var localizationOptions = new RequestLocalizationOptions
+{
+    DefaultRequestCulture = new RequestCulture("en-US"),
+    SupportedCultures = supportedCultures,
+    SupportedUICultures = supportedCultures
+};
+app.UseRequestLocalization(localizationOptions);
 
 app.UseHttpsRedirection();
 

@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using PoseidonPool.Persistance.Contexts;
@@ -11,9 +12,11 @@ using PoseidonPool.Persistance.Contexts;
 namespace PoseidonPool.Persistance.Migrations
 {
     [DbContext(typeof(PoseidonPoolDBContext))]
-    partial class PoseidonPoolDBContextModelSnapshot : ModelSnapshot
+    [Migration("20251029214941_mig1.3")]
+    partial class mig13
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

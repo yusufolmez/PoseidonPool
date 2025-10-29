@@ -16,7 +16,7 @@ namespace PoseidonPool.Application.Features.Commands.Product.UpdateProduct
 
         public async Task<UpdateProductCommandResponse> Handle(UpdateProductCommandRequest request, CancellationToken cancellationToken)
         {
-            var product = await _productService.UpdateAsync(request.Id, request.Model);
+            var product = await _productService.UpdateAsync(request.Id, request.Model, request.Files);
             return new UpdateProductCommandResponse
             {
                 Success = product != null,

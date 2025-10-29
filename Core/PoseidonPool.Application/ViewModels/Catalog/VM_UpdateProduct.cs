@@ -10,5 +10,6 @@ namespace PoseidonPool.Application.ViewModels.Catalog
         public Guid? ProductDetailId { get; set; }
         public Guid? CategoryId { get; set; }
         public Guid? BrandId { get; set; }
+        public string[] RemoveImageColumns { get; set; }
     }
 }
