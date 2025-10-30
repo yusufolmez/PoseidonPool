@@ -13,5 +13,7 @@ namespace PoseidonPool.Application.DTOs.Catalog
         public Guid? BrandId { get; set; }
         public DateTime CreatedDate { get; set; }
         public DateTime? UpdatedDate { get; set; }
+        public double? AverageRating { get; set; }
+        public int? TotalComments { get; set; }
     }
 }

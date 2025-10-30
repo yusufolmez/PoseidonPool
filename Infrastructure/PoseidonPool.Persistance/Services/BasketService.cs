@@ -116,6 +116,21 @@ namespace PoseidonPool.Persistance.Services
             return result.BasketItems.ToList();
         }
 
+        public async Task<(int itemCount, decimal totalAmount)> GetSummaryAsync()
+        {
+            Basket? basket = await ContextBasket();
+            var items = await _basketReadRepository.Table
+                .Include(b => b.BasketItems)
+                .ThenInclude(bi => bi.Product)
+                .Where(b => b.Id == basket.Id)
+                .SelectMany(b => b.BasketItems)
+                .ToListAsync();
+
+            var count = items.Sum(i => i.Quantity);
+            var total = items.Sum(i => (i.Product?.ProductPrice ?? 0m) * i.Quantity);
+            return (count, total);
+        }
+
         public async Task RemoveBasketItemAsync(string basketItemId)
         {
             BasketItem? basketItem = await _basketItemReadRepository.GetByIdAsync(basketItemId);
@@ -135,6 +150,15 @@ namespace PoseidonPool.Persistance.Services
                 _basketItemWriteRepository.Update(basketItem);
                 await _basketItemWriteRepository.SaveAsync();
             }
+        }
+
+        public async Task ClearAsync()
+        {
+            Basket? basket = await ContextBasket();
+            var items = await _basketItemReadRepository.GetWhere(bi => bi.BasketId == basket.Id).ToListAsync();
+            if (items.Count == 0) return;
+            _basketItemWriteRepository.RemoveRange(items);
+            await _basketItemWriteRepository.SaveAsync();
         }
     }
 }

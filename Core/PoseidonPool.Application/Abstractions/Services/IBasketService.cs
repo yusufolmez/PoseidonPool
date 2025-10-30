@@ -10,5 +10,7 @@ namespace PoseidonPool.Application.Abstractions.Services
         public Task UpdateQuantityAsync(VM_Update_BasketItem basketItem);
         public Task RemoveBasketItemAsync(string basketItemId);
         public Basket? GetUserActiveBasketAsync { get; }
+        public Task<(int itemCount, decimal totalAmount)> GetSummaryAsync();
+        public Task ClearAsync();
     }
 }

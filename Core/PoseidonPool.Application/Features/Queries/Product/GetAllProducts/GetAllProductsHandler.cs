@@ -16,11 +16,22 @@ namespace PoseidonPool.Application.Features.Queries.Product.GetAllProducts
 
         public async Task<GetAllProductsQueryResponse> Handle(GetAllProductsQueryRequest request, CancellationToken cancellationToken)
         {
-            var products = await _productService.GetAllAsync();
-            return new GetAllProductsQueryResponse
+            if (request.Page.HasValue || request.PageSize.HasValue || !string.IsNullOrWhiteSpace(request.Sort))
             {
-                Products = products
-            };
+                var page = request.Page ?? 1;
+                var pageSize = request.PageSize ?? 20;
+                var (items, total) = await _productService.GetAllPagedAsync(page, pageSize, request.Sort);
+                return new GetAllProductsQueryResponse
+                {
+                    Products = items,
+                    Page = page,
+                    PageSize = pageSize,
+                    TotalCount = total
+                };
+            }
+
+            var products = await _productService.GetAllAsync();
+            return new GetAllProductsQueryResponse { Products = products };
         }
     }
 }

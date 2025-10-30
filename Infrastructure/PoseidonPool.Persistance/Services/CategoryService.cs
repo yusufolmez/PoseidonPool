@@ -4,6 +4,7 @@ using PoseidonPool.Application.DTOs.Catalog;
 using PoseidonPool.Application.ViewModels.Catalog;
 using PoseidonPool.Application.Repositories.Catalog;
 using PoseidonPool.Domain.Entities.Catalog;
+using PoseidonPool.Application.DTOs.Catalog;
 
 namespace PoseidonPool.Persistance.Services
 {
@@ -80,9 +81,37 @@ namespace PoseidonPool.Persistance.Services
                 Id = c.Id,
                 CategoryName = c.CategoryName,
                 ImageUrl = c.ImageUrl,
+                ParentId = c.ParentId,
                 CreatedDate = c.CreatedDate,
                 UpdatedDate = c.UpdatedDate
             };
+        }
+
+        public async Task<List<CategoryTreeDTO>> GetTreeAsync()
+        {
+            var list = await _categoryReadRepository.GetAll(false).ToListAsync();
+            var dict = list.ToDictionary(c => c.Id, c => new CategoryTreeDTO
+            {
+                Id = c.Id,
+                CategoryName = c.CategoryName,
+                ImageUrl = c.ImageUrl,
+                ParentId = c.ParentId,
+                Children = new List<CategoryTreeDTO>()
+            });
+
+            var roots = new List<CategoryTreeDTO>();
+            foreach (var c in list)
+            {
+                if (c.ParentId.HasValue && dict.ContainsKey(c.ParentId.Value))
+                {
+                    dict[c.ParentId.Value].Children.Add(dict[c.Id]);
+                }
+                else
+                {
+                    roots.Add(dict[c.Id]);
+                }
+            }
+            return roots;
         }
     }
 }

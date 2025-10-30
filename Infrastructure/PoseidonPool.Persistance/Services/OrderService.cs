@@ -165,5 +165,108 @@ namespace PoseidonPool.Persistance.Services
             }
             return (false, null);
         }
+
+        public async Task<List<ListOrderDTO>> GetMyOrdersAsync()
+        {
+            var username = _httpContextAccessor.HttpContext?.User?.Identity?.Name;
+            if (string.IsNullOrEmpty(username)) return new List<ListOrderDTO>();
+            var user = await _userManager.Users.FirstOrDefaultAsync(u => u.UserName == username);
+            if (user == null) return new List<ListOrderDTO>();
+
+            var orders = await _orderingReadRepository.GetWhere(o => o.CustomerId == user, false)
+                .OrderByDescending(o => o.OrderDate).ToListAsync();
+
+            return orders.Select(o => new ListOrderDTO
+            {
+                Id = o.Id,
+                OrderDate = o.OrderDate,
+                TotalAmount = o.TotalAmount,
+                Completed = o.Status == OrderStatus.Delivered || o.Status == OrderStatus.Cancelled
+            }).ToList();
+        }
+
+        public async Task<List<ListOrderDTO>> GetByStatusAsync(string status)
+        {
+            if (!Enum.TryParse<OrderStatus>(status, true, out var st)) return new List<ListOrderDTO>();
+            var orders = await _orderingReadRepository.GetWhere(o => o.Status == st, false)
+                .OrderByDescending(o => o.OrderDate).ToListAsync();
+            return orders.Select(o => new ListOrderDTO
+            {
+                Id = o.Id,
+                OrderDate = o.OrderDate,
+                TotalAmount = o.TotalAmount,
+                Completed = o.Status == OrderStatus.Delivered || o.Status == OrderStatus.Cancelled
+            }).ToList();
+        }
+
+        public async Task<bool> CancelOrderAsync(string id)
+        {
+            var order = await _orderingReadRepository.Table.FirstOrDefaultAsync(o => o.Id == Guid.Parse(id));
+            if (order == null) return false;
+            // Only allow cancel when Pending
+            if (order.Status != OrderStatus.Pending) return false;
+
+            // Only owner or admin can cancel
+            var username = _httpContextAccessor.HttpContext?.User?.Identity?.Name;
+            var user = !string.IsNullOrEmpty(username) ? await _userManager.Users.FirstOrDefaultAsync(u => u.UserName == username) : null;
+            var isOwner = user != null && order.CustomerId?.Id == user.Id;
+            var isAdmin = _httpContextAccessor.HttpContext?.User?.IsInRole("Admin") == true;
+            if (!isOwner && !isAdmin) return false;
+
+            order.Status = OrderStatus.Cancelled;
+            await _orderingWriteRepository.SaveAsync();
+            return true;
+        }
+
+        public async Task<bool> ShipOrderAsync(string id)
+        {
+            var order = await _orderingReadRepository.Table.FirstOrDefaultAsync(o => o.Id == Guid.Parse(id));
+            if (order == null) return false;
+            // Allow ship only from Paid
+            if (order.Status != OrderStatus.Paid) return false;
+            // Require admin role
+            var isAdmin = _httpContextAccessor.HttpContext?.User?.IsInRole("Admin") == true;
+            if (!isAdmin) return false;
+            order.Status = OrderStatus.Shipped;
+            await _orderingWriteRepository.SaveAsync();
+            return true;
+        }
+
+        public async Task<bool> DeliverOrderAsync(string id)
+        {
+            var order = await _orderingReadRepository.Table.FirstOrDefaultAsync(o => o.Id == Guid.Parse(id));
+            if (order == null) return false;
+            // Allow deliver only from Shipped
+            if (order.Status != OrderStatus.Shipped) return false;
+            // Require admin role
+            var isAdmin = _httpContextAccessor.HttpContext?.User?.IsInRole("Admin") == true;
+            if (!isAdmin) return false;
+            order.Status = OrderStatus.Delivered;
+            await _orderingWriteRepository.SaveAsync();
+            return true;
+        }
+
+        public async Task<List<object>> GetOrderDetailsAsync(string id)
+        {
+            var order = await _orderingReadRepository.Table
+                .Include(o => o.OrderDetails)
+                .ThenInclude(od => od.Product)
+                .FirstOrDefaultAsync(o => o.Id == Guid.Parse(id));
+            if (order == null) return new List<object>();
+            // Only owner or admin can view details
+            var username = _httpContextAccessor.HttpContext?.User?.Identity?.Name;
+            var user = !string.IsNullOrEmpty(username) ? await _userManager.Users.FirstOrDefaultAsync(u => u.UserName == username) : null;
+            var isOwner = user != null && order.CustomerId?.Id == user.Id;
+            var isAdmin = _httpContextAccessor.HttpContext?.User?.IsInRole("Admin") == true;
+            if (!isOwner && !isAdmin) return new List<object>();
+
+            return order.OrderDetails.Select(od => new
+            {
+                od.ProductId,
+                od.ProductName,
+                od.ProductUnitPrice,
+                od.Quantity
+            } as object).ToList();
+        }
     }
 }

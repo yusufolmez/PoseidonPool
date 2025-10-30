@@ -8,6 +8,8 @@ using PoseidonPool.Persistance.Contexts;
 using PoseidonPool.Persistance.Repositories.Basket;
 using PoseidonPool.Persistance.Repositories.Order;
 using PoseidonPool.Persistance.Services;
+using PoseidonPool.Application.Repositories.Comment;
+using PoseidonPool.Persistance.Repositories.Comment;
 
 namespace PoseidonPool.Persistance
 {
@@ -43,6 +45,10 @@ namespace PoseidonPool.Persistance
             services.AddScoped<PoseidonPool.Application.Repositories.Catalog.IBrandWriteRepository, PoseidonPool.Persistance.Repositories.Catalog.BrandWriteRepository>();
             services.AddScoped<PoseidonPool.Application.Repositories.Catalog.ICategoryReadRepository, PoseidonPool.Persistance.Repositories.Catalog.CategoryReadRepository>();
             services.AddScoped<PoseidonPool.Application.Repositories.Catalog.ICategoryWriteRepository, PoseidonPool.Persistance.Repositories.Catalog.CategoryWriteRepository>();
+
+            // Comment repositories
+            services.AddScoped<IUserCommentReadRepository, UserCommentReadRepository>();
+            services.AddScoped<IUserCommentWriteRepository, UserCommentWriteRepository>();
 
             // Services
             services.AddScoped<IBasketService, BasketService>();

@@ -6,6 +6,7 @@ using PoseidonPool.Application.Features.Queries.Brand.GetBrandById;
 using PoseidonPool.Application.Features.Commands.Brand.CreateBrand;
 using PoseidonPool.Application.Features.Commands.Brand.UpdateBrand;
 using PoseidonPool.Application.Features.Commands.Brand.DeleteBrand;
+using PoseidonPool.Application.Features.Queries.Product.GetByBrand;
 
 namespace PoseidonPool.API.Controllers
 {
@@ -52,6 +53,13 @@ namespace PoseidonPool.API.Controllers
         public async Task<IActionResult> Delete([FromRoute] string id)
         {
             var response = await _mediator.Send(new DeleteBrandCommandRequest { Id = id });
+            return Ok(response);
+        }
+
+        [HttpGet("{id}/products")]
+        public async Task<IActionResult> GetProducts([FromRoute] Guid id)
+        {
+            var response = await _mediator.Send(new GetProductsByBrandQueryRequest { BrandId = id });
             return Ok(response);
         }
     }

@@ -112,5 +112,63 @@ namespace PoseidonPool.Persistance.Services
             else
                 throw new NotFoundUserException();
         }
+
+        public async Task<bool> LogoutAsync(string userName)
+        {
+            if (string.IsNullOrWhiteSpace(userName)) return false;
+            var user = await _userManager.FindByNameAsync(userName);
+            if (user == null) return false;
+            user.RefreshToken = null;
+            user.RefreshTokenEndDate = null;
+            await _userManager.UpdateAsync(user);
+            await _signInManager.SignOutAsync();
+            return true;
+        }
+
+        public async Task<Application.DTOs.User.MeDTO> GetMeAsync(string userName)
+        {
+            if (string.IsNullOrWhiteSpace(userName)) return null;
+            var user = await _userManager.FindByNameAsync(userName);
+            if (user == null) return null;
+            var roles = await _userManager.GetRolesAsync(user);
+            return new Application.DTOs.User.MeDTO
+            {
+                Id = user.Id,
+                UserName = user.UserName,
+                Email = user.Email,
+                NameSurname = user.NameSurname,
+                Roles = roles?.ToArray() ?? System.Array.Empty<string>()
+            };
+        }
+
+        public async Task<bool> ForgotPasswordAsync(string email)
+        {
+            if (string.IsNullOrWhiteSpace(email)) return false;
+            var user = await _userManager.FindByEmailAsync(email);
+            if (user == null) return false;
+            var token = await _userManager.GeneratePasswordResetTokenAsync(user);
+            // TODO: e-posta sağlayıcısı aracılığıyla jeton gönder. Şimdilik, harici olarak günlüğe kaydet veya sakla
+            // Göndermeden kasıtlı olarak true döndür.
+            return !string.IsNullOrWhiteSpace(token);
+        }
+
+        public async Task<bool> ResetPasswordAsync(string email, string resetToken, string newPassword)
+        {
+            var user = await _userManager.FindByEmailAsync(email);
+            if (user == null) return false;
+            var result = await _userManager.ResetPasswordAsync(user, resetToken, newPassword);
+            return result.Succeeded;
+        }
+
+        public async Task<bool> RevokeRefreshTokenAsync(string userName)
+        {
+            if (string.IsNullOrWhiteSpace(userName)) return false;
+            var user = await _userManager.FindByNameAsync(userName);
+            if (user == null) return false;
+            user.RefreshToken = null;
+            user.RefreshTokenEndDate = null;
+            await _userManager.UpdateAsync(user);
+            return true;
+        }
     }
 }

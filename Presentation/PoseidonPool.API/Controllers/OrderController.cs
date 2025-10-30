@@ -5,6 +5,7 @@ using PoseidonPool.Application.Features.Commands.Order.CreateOrder;
 using PoseidonPool.Application.Features.Commands.Order.CompleteOrder;
 using PoseidonPool.Application.Features.Queries.Order.GetAllOrders;
 using PoseidonPool.Application.Features.Queries.Order.GetOrderById;
+using Microsoft.AspNetCore.Authorization;
 
 namespace PoseidonPool.API.Controllers
 {
@@ -44,6 +45,48 @@ namespace PoseidonPool.API.Controllers
         public async Task<IActionResult> Complete([FromRoute] string id)
         {
             var response = await _mediator.Send(new CompleteOrderCommandRequest { Id = id });
+            return Ok(response);
+        }
+
+        [HttpGet("my")]
+        public async Task<IActionResult> GetMy()
+        {
+            var response = await _mediator.Send(new PoseidonPool.Application.Features.Queries.Order.GetMyOrders.GetMyOrdersQueryRequest());
+            return Ok(response);
+        }
+
+        [HttpGet("status/{status}")]
+        public async Task<IActionResult> GetByStatus([FromRoute] string status)
+        {
+            var response = await _mediator.Send(new PoseidonPool.Application.Features.Queries.Order.GetByStatus.GetOrdersByStatusQueryRequest { Status = status });
+            return Ok(response);
+        }
+
+        [HttpPut("{id}/cancel")]
+        public async Task<IActionResult> Cancel([FromRoute] string id)
+        {
+            var response = await _mediator.Send(new PoseidonPool.Application.Features.Commands.Order.CancelOrder.CancelOrderCommandRequest { Id = id });
+            return Ok(response);
+        }
+
+        [HttpPut("{id}/ship")]
+        public async Task<IActionResult> Ship([FromRoute] string id)
+        {
+            var response = await _mediator.Send(new PoseidonPool.Application.Features.Commands.Order.ShipOrder.ShipOrderCommandRequest { Id = id });
+            return Ok(response);
+        }
+
+        [HttpPut("{id}/deliver")]
+        public async Task<IActionResult> Deliver([FromRoute] string id)
+        {
+            var response = await _mediator.Send(new PoseidonPool.Application.Features.Commands.Order.DeliverOrder.DeliverOrderCommandRequest { Id = id });
+            return Ok(response);
+        }
+
+        [HttpGet("{id}/details")]
+        public async Task<IActionResult> Details([FromRoute] string id)
+        {
+            var response = await _mediator.Send(new PoseidonPool.Application.Features.Queries.Order.GetOrderDetails.GetOrderDetailsQueryRequest { Id = id });
             return Ok(response);
         }
     }

@@ -2,6 +2,8 @@ using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using PoseidonPool.Application.Features.Commands.Category.CreateCategory;
 using PoseidonPool.Application.Features.Commands.Category.UpdateCategory;
+using PoseidonPool.Application.Features.Queries.Category.GetCategoryTree;
+using PoseidonPool.Application.Features.Queries.Category.GetProducts;
 
 namespace PoseidonPool.API.Controllers
 {
@@ -48,6 +50,20 @@ namespace PoseidonPool.API.Controllers
         public async Task<IActionResult> Delete([FromRoute] string id)
         {
             var response = await _mediator.Send(new PoseidonPool.Application.Features.Commands.Category.DeleteCategory.DeleteCategoryCommandRequest { Id = id });
+            return Ok(response);
+        }
+
+        [HttpGet("{id}/products")]
+        public async Task<IActionResult> GetProducts([FromRoute] Guid id)
+        {
+            var response = await _mediator.Send(new GetProductsByCategoryIdQueryRequest { CategoryId = id });
+            return Ok(response);
+        }
+
+        [HttpGet("tree")]
+        public async Task<IActionResult> GetTree()
+        {
+            var response = await _mediator.Send(new GetCategoryTreeQueryRequest());
             return Ok(response);
         }
     }

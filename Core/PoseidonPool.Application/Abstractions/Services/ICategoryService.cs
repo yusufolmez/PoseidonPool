@@ -10,5 +10,6 @@ namespace PoseidonPool.Application.Abstractions.Services
         Task<CategoryDTO> CreateAsync(VM_CreateCategory model);
         Task<CategoryDTO> UpdateAsync(string id, VM_UpdateCategory model);
         Task<bool> DeleteAsync(string id);
+        Task<List<CategoryTreeDTO>> GetTreeAsync();
     }
 }

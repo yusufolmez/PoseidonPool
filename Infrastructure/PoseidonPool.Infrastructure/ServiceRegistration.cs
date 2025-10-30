@@ -5,6 +5,7 @@ using Microsoft.Extensions.Configuration;
 using PoseidonPool.Application.Abstractions.Storage;
 using PoseidonPool.Application.Abstractions.Storage.Amazon;
 using PoseidonPool.Infrastructure.Services.Storage;
+using PoseidonPool.Application.Abstractions.Services;
 using PoseidonPool.Infrastructure.Services.Storage.Amazon;
 using Amazon.S3;
 using Amazon.Runtime;
@@ -21,6 +22,8 @@ namespace PoseidonPool.Infrastructure
             // Storage registrations: IStorage -> AmazonStorage, IStorageService -> StorageService
             services.AddScoped<IStorage, AmazonStorage>();
             services.AddScoped<IStorageService, StorageService>();
+            // Guest basket store (in-memory, swap to Redis implementation later)
+            services.AddSingleton<IGuestBasketStore, InMemoryGuestBasketStore>();
 
             // Register IAmazonS3 client. Credentials/region can come from appsettings or environment variables.
             // Uses credential fallback (environment/instance profile) when explicit keys are not provided.
