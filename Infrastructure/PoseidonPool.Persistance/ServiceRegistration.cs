@@ -45,6 +45,18 @@ namespace PoseidonPool.Persistance
             services.AddScoped<PoseidonPool.Application.Repositories.Catalog.IBrandWriteRepository, PoseidonPool.Persistance.Repositories.Catalog.BrandWriteRepository>();
             services.AddScoped<PoseidonPool.Application.Repositories.Catalog.ICategoryReadRepository, PoseidonPool.Persistance.Repositories.Catalog.CategoryReadRepository>();
             services.AddScoped<PoseidonPool.Application.Repositories.Catalog.ICategoryWriteRepository, PoseidonPool.Persistance.Repositories.Catalog.CategoryWriteRepository>();
+            services.AddScoped<PoseidonPool.Application.Repositories.Catalog.IAboutReadRepository, PoseidonPool.Persistance.Repositories.Catalog.AboutReadRepository>();
+            services.AddScoped<PoseidonPool.Application.Repositories.Catalog.IAboutWriteRepository, PoseidonPool.Persistance.Repositories.Catalog.AboutWriteRepository>();
+            services.AddScoped<PoseidonPool.Application.Repositories.Catalog.IContactReadRepository, PoseidonPool.Persistance.Repositories.Catalog.ContactReadRepository>();
+            services.AddScoped<PoseidonPool.Application.Repositories.Catalog.IContactWriteRepository, PoseidonPool.Persistance.Repositories.Catalog.ContactWriteRepository>();
+            services.AddScoped<PoseidonPool.Application.Repositories.Catalog.IFeatureReadRepository, PoseidonPool.Persistance.Repositories.Catalog.FeatureReadRepository>();
+            services.AddScoped<PoseidonPool.Application.Repositories.Catalog.IFeatureWriteRepository, PoseidonPool.Persistance.Repositories.Catalog.FeatureWriteRepository>();
+            services.AddScoped<PoseidonPool.Application.Repositories.Catalog.IFeatureSliderReadRepository, PoseidonPool.Persistance.Repositories.Catalog.FeatureSliderReadRepository>();
+            services.AddScoped<PoseidonPool.Application.Repositories.Catalog.IFeatureSliderWriteRepository, PoseidonPool.Persistance.Repositories.Catalog.FeatureSliderWriteRepository>();
+            services.AddScoped<PoseidonPool.Application.Repositories.Catalog.IOfferDiscountReadRepository, PoseidonPool.Persistance.Repositories.Catalog.OfferDiscountReadRepository>();
+            services.AddScoped<PoseidonPool.Application.Repositories.Catalog.IOfferDiscountWriteRepository, PoseidonPool.Persistance.Repositories.Catalog.OfferDiscountWriteRepository>();
+            services.AddScoped<PoseidonPool.Application.Repositories.Catalog.ISpecialOfferReadRepository, PoseidonPool.Persistance.Repositories.Catalog.SpecialOfferReadRepository>();
+            services.AddScoped<PoseidonPool.Application.Repositories.Catalog.ISpecialOfferWriteRepository, PoseidonPool.Persistance.Repositories.Catalog.SpecialOfferWriteRepository>();
 
             // Comment repositories
             services.AddScoped<IUserCommentReadRepository, UserCommentReadRepository>();
@@ -59,6 +71,12 @@ namespace PoseidonPool.Persistance
             services.AddScoped<PoseidonPool.Application.Abstractions.Services.IProductService, PoseidonPool.Persistance.Services.ProductService>();
             services.AddScoped<PoseidonPool.Application.Abstractions.Services.IBrandService, PoseidonPool.Persistance.Services.BrandService>();
             services.AddScoped<PoseidonPool.Application.Abstractions.Services.ICategoryService, PoseidonPool.Persistance.Services.CategoryService>();
+            services.AddScoped<PoseidonPool.Application.Abstractions.Services.IAboutService, PoseidonPool.Persistance.Services.AboutService>();
+            services.AddScoped<PoseidonPool.Application.Abstractions.Services.IContactService, PoseidonPool.Persistance.Services.ContactService>();
+            services.AddScoped<PoseidonPool.Application.Abstractions.Services.IFeatureService, PoseidonPool.Persistance.Services.FeatureService>();
+            services.AddScoped<PoseidonPool.Application.Abstractions.Services.IFeatureSliderService, PoseidonPool.Persistance.Services.FeatureSliderService>();
+            services.AddScoped<PoseidonPool.Application.Abstractions.Services.IOfferDiscountService, PoseidonPool.Persistance.Services.OfferDiscountService>();
+            services.AddScoped<PoseidonPool.Application.Abstractions.Services.ISpecialOfferService, PoseidonPool.Persistance.Services.SpecialOfferService>();
         }
     }
 }

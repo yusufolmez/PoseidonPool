@@ -11,12 +11,17 @@ using Amazon.S3;
 using Amazon.Runtime;
 using Amazon;
 using System;
+using Microsoft.Extensions.Options;
+using PoseidonPool.Infrastructure.Options;
+using PoseidonPool.Application.Abstractions.Payment;
+using PoseidonPool.Application.Abstractions.Payment.Iyzico;
+using PoseidonPool.Infrastructure.Services.Payment.Iyzico;
 
 namespace PoseidonPool.Infrastructure
 {
     public static class ServiceRegistration
     {
-        public static void AddInfrastructureServices(this IServiceCollection services)
+        public static void AddInfrastructureServices(this IServiceCollection services, IConfiguration configuration = null)
         {
             services.AddScoped<ITokenHandler, TokenHandler>();
             // Storage registrations: IStorage -> AmazonStorage, IStorageService -> StorageService
@@ -59,6 +64,18 @@ namespace PoseidonPool.Infrastructure
 
                 return new AmazonS3Client(creds, s3Config);
             });
+
+            // Payments - Configuration'dan Iyzico ayarlarını bağla
+            if (configuration != null)
+            {
+                services.Configure<IyzipayOptions>(configuration.GetSection("Payments:Iyzico"));
+            }
+            else
+            {
+                services.AddOptions<IyzipayOptions>().BindConfiguration("Payments:Iyzico");
+            }
+            services.AddScoped<IIyzicoService, IyzicoService>();
+            services.AddScoped<IPaymentService, PoseidonPool.Infrastructure.Services.PaymentService>();
         }
     }
 }

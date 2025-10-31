@@ -121,6 +121,8 @@ namespace PoseidonPool.Persistance.Services
             {
                 Id = order.Id,
                 OrderDate = order.OrderDate,
+                TotalAmount = order.TotalAmount,
+                Status = (int)order.Status, // OrderStatus enum value
                 Completed = order.Status == OrderStatus.Delivered || order.Status == OrderStatus.Cancelled,
                 Address = new Application.DTOs.Order.AddressDTO
                 {
@@ -136,12 +138,12 @@ namespace PoseidonPool.Persistance.Services
                     Description = order.ShippingAddress.Description,
                     ZipCode = order.ShippingAddress.ZipCode
                 },
-                BasketItems = order.OrderDetails.Select(od => new
+                BasketItems = order.OrderDetails.Select(od => new Application.DTOs.Order.OrderItemDTO
                 {
-                    od.ProductId,
-                    od.ProductName,
-                    od.ProductUnitPrice,
-                    od.Quantity
+                    ProductId = od.ProductId,
+                    ProductName = od.ProductName,
+                    ProductUnitPrice = od.ProductUnitPrice,
+                    Quantity = od.Quantity
                 }).ToList()
             };
         }
