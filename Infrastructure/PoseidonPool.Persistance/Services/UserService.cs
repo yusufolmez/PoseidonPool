@@ -24,7 +24,8 @@ namespace PoseidonPool.Persistance.Services
                 Id = Guid.NewGuid().ToString(),
                 UserName = model.Username,
                 Email = model.Email,
-                NameSurname = model.NameSurname
+                NameSurname = model.NameSurname,
+                PhoneNumber = model.PhoneNumber
             }, model.Password);
 
             CreateUserResponseDTO response = new() { Succeeded = result.Succeeded };

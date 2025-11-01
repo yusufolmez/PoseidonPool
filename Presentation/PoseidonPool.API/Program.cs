@@ -21,8 +21,8 @@ builder.Services.AddControllers();
 builder.Services.AddCors(options =>
 {
     options.AddPolicy("AllowAll",
-        builder => builder
-            .WithOrigins("https://localhost:3000")
+        policy => policy
+            .WithOrigins("https://localhost:7261", "http://localhost:5277", "http://localhost:3000", "https://localhost:3000")
             .AllowAnyMethod()
             .AllowAnyHeader()
             .AllowCredentials());
@@ -72,6 +72,8 @@ var localizationOptions = new RequestLocalizationOptions
     SupportedUICultures = supportedCultures
 };
 app.UseRequestLocalization(localizationOptions);
+
+app.UseCors("AllowAll");
 
 app.UseHttpsRedirection();
 

@@ -61,6 +61,9 @@ namespace PoseidonPool.Persistance
             // Comment repositories
             services.AddScoped<IUserCommentReadRepository, UserCommentReadRepository>();
             services.AddScoped<IUserCommentWriteRepository, UserCommentWriteRepository>();
+            // ProductLike repositories
+            services.AddScoped<PoseidonPool.Application.Repositories.Catalog.IProductLikeReadRepository, PoseidonPool.Persistance.Repositories.Catalog.ProductLikeReadRepository>();
+            services.AddScoped<PoseidonPool.Application.Repositories.Catalog.IProductLikeWriteRepository, PoseidonPool.Persistance.Repositories.Catalog.ProductLikeWriteRepository>();
 
             // Services
             services.AddScoped<IBasketService, BasketService>();

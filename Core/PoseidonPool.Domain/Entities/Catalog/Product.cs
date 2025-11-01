@@ -15,6 +15,7 @@ namespace PoseidonPool.Domain.Entities.Catalog
         public Guid BrandId { get; set; }
         public ICollection<UserComment> Comments { get; set; }
         public ICollection<ProductImage> Images { get; set; }
+        public ICollection<ProductLike> ProductLikes { get; set; }
         public Brand Brand { get; set; }
         public ProductDetail ProductDetail { get; set; }
         public Category Category { get; set; }

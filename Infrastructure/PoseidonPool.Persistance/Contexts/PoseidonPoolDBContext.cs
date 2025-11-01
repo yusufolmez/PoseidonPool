@@ -43,6 +43,7 @@ namespace PoseidonPool.Persistance.Contexts
         public DbSet<ProductDetail> ProductDetails { get; set; }
         public DbSet<ProductImage> ProductImages { get; set; }
         public DbSet<SpecialOffer> SpecialOffers { get; set; }
+        public DbSet<ProductLike> ProductLikes { get; set; }
 
         // COMMENT
         public DbSet<UserComment> UserComments { get; set; }
@@ -149,9 +150,27 @@ namespace PoseidonPool.Persistance.Contexts
 
             // 12. Product - UserComment (Bire Çok)
             builder.Entity<Product>()
-                .HasMany(p => p.Comments) // Product entity'sinde Comments koleksiyonu olmalı
+                .HasMany(p => p.Comments)
                 .WithOne(uc => uc.Product)
                 .HasForeignKey(uc => uc.ProductId);
+
+            // 15. AppUser - ProductLike (Bire Çok)
+            builder.Entity<AppUser>()
+                .HasMany(u => u.ProductLikes)
+                .WithOne(pl => pl.User)
+                .HasForeignKey(pl => pl.UserId);
+
+            // 16. Product - ProductLike (Bire Çok)
+            builder.Entity<Product>()
+                .HasMany(p => p.ProductLikes)
+                .WithOne(pl => pl.Product)
+                .HasForeignKey(pl => pl.ProductId)
+                .OnDelete(DeleteBehavior.Cascade);
+
+            // 17. ProductLike Unique Index (UserId, ProductId)
+            builder.Entity<ProductLike>()
+                .HasIndex(pl => new { pl.UserId, pl.ProductId })
+                .IsUnique();
 
             // -------------------------------------------------------------
             // D. KARGO (Cargo) İlişkileri

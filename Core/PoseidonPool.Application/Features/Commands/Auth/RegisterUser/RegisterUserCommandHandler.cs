@@ -23,7 +23,8 @@ namespace PoseidonPool.Application.Features.Commands.Auth.RegisterUser
                 Username = request.Username,
                 Email = request.Email,
                 Password = request.Password,
-                PasswordConfirm = request.PasswordConfirm
+                PasswordConfirm = request.PasswordConfirm,
+                PhoneNumber = request.PhoneNumber
             };
 
             var result = await _userService.CreateAsync(dto);

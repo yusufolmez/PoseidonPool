@@ -16,6 +16,7 @@ using PoseidonPool.Infrastructure.Options;
 using PoseidonPool.Application.Abstractions.Payment;
 using PoseidonPool.Application.Abstractions.Payment.Iyzico;
 using PoseidonPool.Infrastructure.Services.Payment.Iyzico;
+using PoseidonPool.Infrastructure.Services.Mail;
 
 namespace PoseidonPool.Infrastructure
 {
@@ -76,6 +77,7 @@ namespace PoseidonPool.Infrastructure
             }
             services.AddScoped<IIyzicoService, IyzicoService>();
             services.AddScoped<IPaymentService, PoseidonPool.Infrastructure.Services.PaymentService>();
+            services.AddScoped<IMailService, SmtpMailService>();
         }
     }
 }
